@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeonKino — Onlayn kino platformasi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <canvas id="particles"></canvas>
+  <div class="cursor-glow" id="cursorGlow"></div>
+  <div class="bg-blob blob-1"></div>
+  <div class="bg-blob blob-2"></div>
+  <div class="bg-blob blob-3"></div>
+
+  <!-- NAVBAR -->
+  <header class="navbar" id="navbar">
+    <a href="#" class="logo"><span class="logo-neon">NEON</span>KINO</a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#home" class="active">Bosh sahifa</a>
+      <a href="#trend">Trendda</a>
+      <div class="nav-dropdown" id="turkum">
+        <button class="nav-drop-btn">Turkum
+          <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="mega glass">
+          <div class="mega-tabs">
+            <button class="mega-tab active" data-pane="paneGenre">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+              Janr
+            </button>
+            <button class="mega-tab" data-pane="paneYear">
+              <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+              Yil
+            </button>
+          </div>
+          <div class="mega-body">
+            <div class="mega-pane active" id="paneGenre"></div>
+            <div class="mega-pane" id="paneYear"></div>
+          </div>
+        </div>
+      </div>
+      <a href="#movies">Filmlar</a>
+      <a href="#series">Seriallar</a>
+      <a href="#plans">Obuna</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="icon-btn music-btn" id="musicBtn" aria-label="Fon musiqasi" title="Fon musiqasi">
+        <span class="music-bars"><i></i><i></i><i></i><i></i></span>
+        <svg viewBox="0 0 24 24" class="music-off"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/><path d="M3 3l18 18"/></svg>
+      </button>
+      <button class="icon-btn" id="searchBtn" aria-label="Qidirish">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      </button>
+      <button class="btn-outline login-btn" id="loginBtn">Kirish</button>
+      <button class="user-chip" id="userChip" hidden>
+        <span class="avatar" id="chipAvatar"></span>
+        <span class="chip-text"><b id="chipName"></b><small id="chipPlan"></small></span>
+      </button>
+      <button class="burger" id="burger" aria-label="Menyu"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <!-- SEARCH OVERLAY -->
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      <input type="text" id="searchInput" placeholder="Film, serial yoki aktyor nomini yozing..." />
+      <button class="close-x" id="searchClose">&times;</button>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-left">
+      <p class="hero-sub reveal">KINO OLAMIGA XUSH KELIBSIZ</p>
+      <h1 class="hero-title reveal" data-text="CINEMATIC">CINEMATIC</h1>
+      <p class="hero-desc reveal">
+        NeonKino — minglab filmlar, seriallar va eksklyuziv premyeralar bitta platformada.
+        4K sifat, Dolby Atmos ovoz va reklamasiz tomosha.
+      </p>
+      <div class="hero-buttons reveal">
+        <button class="btn-neon" id="heroPlay">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg> Tomosha qilish
+        </button>
+        <a href="#movies" class="btn-link">Katalog <span class="arrow">&rarr;</span></a>
+      </div>
+
+      <div class="premiere reveal">
+        <p class="label">Bugungi premyera</p>
+        <div class="premiere-card glass">
+          <div class="premiere-icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m10 9 5 3-5 3z"/></svg>
+          </div>
+          <div>
+            <small>Hozir efirda</small>
+            <strong>“Dune: Part Two” — 2 soat 46 daqiqa</strong>
+          </div>
+          <span class="live-dot">LIVE</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="teaser" id="teaser">
+        <div class="teaser-frame">
+          <div class="teaser-slides" id="teaserSlides"></div>
+          <div class="teaser-video" id="teaserVideo"><div id="teaserPlayer"></div></div>
+          <div class="teaser-shade"></div>
+          <div class="teaser-scan"></div>
+          <div class="teaser-glitch" id="teaserGlitch"></div>
+          <div class="teaser-bars" id="teaserBars"></div>
+          <span class="teaser-badge">TEZ KUNDA · 18.12.2026</span>
+          <div class="teaser-caption">
+            <small>AVENGERS: DOOMSDAY</small>
+          </div>
+          <span class="teaser-count" id="teaserCount"></span>
+          <button class="teaser-nav prev" id="teaserPrev" aria-label="Oldingi"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
+          <button class="teaser-nav next" id="teaserNext" aria-label="Keyingi"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
+          <button class="teaser-sound" id="teaserSound" aria-label="Ovoz">
+            <svg viewBox="0 0 24 24" class="ico-off"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg>
+            <svg viewBox="0 0 24 24" class="ico-on"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>
+          </button>
+          <button class="teaser-pause" id="teaserPause" aria-label="Pauza">
+            <svg viewBox="0 0 24 24"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="float-badge glass b1">4K Ultra HD</div>
+      <div class="float-badge glass b2"><b class="counter" data-target="12000">0</b>+ Filmlar</div>
+      <div class="float-badge glass b3">Dolby Atmos</div>
+
+      <div class="countdown">
+        <div class="cd-box glass"><b id="cdDays">00</b><small>Kun</small></div>
+        <div class="cd-box glass"><b id="cdHours">00</b><small>Soat</small></div>
+        <div class="cd-box glass"><b id="cdMins">00</b><small>Daqiqa</small></div>
+        <div class="cd-box glass"><b id="cdSecs">00</b><small>Soniya</small></div>
+      </div>
+      <p class="cd-caption">“Avengers: Doomsday” premyerasigacha</p>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee">
+    <div class="marquee-track" id="marqueeTrack"></div>
+  </div>
+
+  <!-- TRENDING -->
+  <section class="section" id="trend">
+    <div class="glass-panel reveal">
+      <div class="section-head">
+        <h2>Hozir trendda <span class="fire">🔥</span></h2>
+        <a href="#movies" class="see-all">Hammasi</a>
+      </div>
+      <div class="trend-grid" id="trendGrid"></div>
+    </div>
+  </section>
+
+  <!-- AD BANNER (obunasiz va Start tarifida ko'rinadi) -->
+  <div class="section ad-slot" id="adSlot" hidden>
+    <div class="ad-banner" id="adBanner"></div>
+  </div>
+
+  <!-- MOVIES -->
+  <section class="section" id="movies">
+    <div class="section-head reveal">
+      <h2>Filmlar katalogi</h2>
+      <div class="filters" id="filters"></div>
+    </div>
+    <div class="movie-grid" id="movieGrid"></div>
+  </section>
+
+  <!-- SERIES -->
+  <section class="section" id="series">
+    <div class="section-head reveal">
+      <h2>Mashhur seriallar</h2>
+      <div class="slider-nav">
+        <button class="icon-btn" id="slidePrev" aria-label="Oldingi"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
+        <button class="icon-btn" id="slideNext" aria-label="Keyingi"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
+      </div>
+    </div>
+    <div class="series-slider" id="seriesSlider"></div>
+  </section>
+
+  <!-- STATS -->
+  <section class="section stats reveal">
+    <div class="stat glass"><b class="counter" data-target="12000">0</b><span>Filmlar</span></div>
+    <div class="stat glass"><b class="counter" data-target="3500">0</b><span>Seriallar</span></div>
+    <div class="stat glass"><b class="counter" data-target="850000">0</b><span>Foydalanuvchilar</span></div>
+    <div class="stat glass"><b class="counter" data-target="98">0</b><span>% Mamnunlik</span></div>
+  </section>
+
+  <!-- PLANS -->
+  <section class="section" id="plans">
+    <div class="section-head center reveal"><h2>Obuna tariflari</h2></div>
+    <div class="plans">
+      <div class="plan glass reveal" data-plan="free">
+        <h3>Bepul</h3>
+        <p class="price">0 <small>so'm</small></p>
+        <ul><li>4K sifat</li><li>Barcha oddiy filmlar</li><li>Reklama bilan</li><li class="no">Premium filmlar yo'q</li></ul>
+        <button class="btn-outline full" data-plan="free">Tomosha qilish</button>
+      </div>
+      <div class="plan glass reveal" data-plan="month">
+        <h3>Premium · 1 oy</h3>
+        <p class="price">49 000 <small>so'm/oy</small></p>
+        <ul><li>4K sifat</li><li>Barcha filmlar + Premium filmlar</li><li>Reklamasiz</li><li>Istalgan payt bekor qilish</li></ul>
+        <button class="btn-neon full" data-plan="month">Tanlash</button>
+      </div>
+      <div class="plan glass featured reveal" data-plan="year">
+        <span class="tag">−20% · Eng foydali</span>
+        <h3>Premium · 1 yil</h3>
+        <p class="price">470 000 <small>so'm/yil</small></p>
+        <ul><li>Premium'dagi hamma narsa</li><li>Oyiga ~39 000 so'm</li><li>118 000 so'm tejaysiz</li></ul>
+        <button class="btn-neon full" data-plan="year">Tanlash</button>
+      </div>
+    </div>
+    <p class="plans-note reveal">4K sifat barcha tariflarda tekin. <span class="premium-tag">PREMIUM</span> belgili filmlar faqat Premium obunada.</p>
+  </section>
+
+  <!-- FILM SAHIFASI (#/film/... manzilida ko'rinadi) -->
+  <main class="film-page" id="filmPage" hidden></main>
+
+  <footer class="footer">
+    <a href="#" class="logo"><span class="logo-neon">NEON</span>KINO</a>
+    <p>© 2026 NeonKino. Barcha huquqlar himoyalangan.</p>
+  </footer>
+
+  <!-- PLAYER MODAL -->
+  <div class="modal" id="playerModal">
+    <div class="player glass">
+      <button class="close-x" id="playerClose">&times;</button>
+      <div class="screen" id="screen">
+        <div class="screen-art" id="screenArt"></div>
+        <div class="screen-title" id="screenTitle"></div>
+        <div class="eq"><span></span><span></span><span></span><span></span><span></span></div>
+        <video class="screen-video" id="screenVideo" playsinline hidden></video>
+        <div class="ad-roll" id="adRoll" hidden></div>
+      </div>
+      <div class="controls">
+        <button class="ctrl" id="playToggle" aria-label="Pauza">
+          <svg viewBox="0 0 24 24" id="playIcon"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+        </button>
+        <span class="time" id="timeNow">00:00</span>
+        <div class="progress" id="progress"><div class="progress-fill" id="progressFill"></div></div>
+        <span class="time" id="timeTotal">02:14:00</span>
+        <span class="quality" id="quality">4K</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUTH MODAL -->
+  <div class="modal" id="authModal">
+    <div class="acc-card glass auth-card">
+      <button class="close-x" data-close>&times;</button>
+      <div class="auth-logo"><span class="logo-neon">NEON</span>KINO</div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">Kirish</button>
+        <button class="auth-tab" data-tab="register">Ro'yxatdan o'tish</button>
+        <span class="auth-tab-ink"></span>
+      </div>
+      <p class="auth-reason" id="authReason" hidden></p>
+
+      <form class="auth-form active" id="loginForm" novalidate>
+        <label class="field"><span>Email</span>
+          <input type="email" name="email" autocomplete="email" placeholder="siz@example.com" required />
+        </label>
+        <label class="field"><span>Parol</span>
+          <div class="pass-wrap">
+            <input type="password" name="password" autocomplete="current-password" placeholder="••••••" required />
+            <button type="button" class="pass-eye" aria-label="Parolni ko'rsatish">👁</button>
+          </div>
+        </label>
+        <p class="form-error" data-error></p>
+        <button class="btn-neon full" type="submit">Kirish</button>
+        <p class="auth-switch">Hisobingiz yo'qmi? <a href="#" data-goto="register">Ro'yxatdan o'ting</a></p>
+      </form>
+
+      <form class="auth-form" id="registerForm" novalidate>
+        <label class="field"><span>Ism</span>
+          <input type="text" name="name" autocomplete="name" placeholder="Ismingiz" required />
+        </label>
+        <label class="field"><span>Email</span>
+          <input type="email" name="email" autocomplete="email" placeholder="siz@example.com" required />
+        </label>
+        <label class="field"><span>Parol</span>
+          <div class="pass-wrap">
+            <input type="password" name="password" autocomplete="new-password" placeholder="Kamida 6 ta belgi" required />
+            <button type="button" class="pass-eye" aria-label="Parolni ko'rsatish">👁</button>
+          </div>
+          <div class="strength"><i id="strengthBar"></i></div>
+        </label>
+        <label class="field"><span>Parolni tasdiqlang</span>
+          <input type="password" name="confirm" autocomplete="new-password" placeholder="Parolni qayta yozing" required />
+        </label>
+        <p class="form-error" data-error></p>
+        <button class="btn-neon full" type="submit">Hisob yaratish</button>
+        <p class="auth-switch">Hisobingiz bormi? <a href="#" data-goto="login">Kirish</a></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- CHECKOUT MODAL -->
+  <div class="modal" id="checkoutModal">
+    <div class="acc-card glass checkout-card">
+      <button class="close-x" data-close>&times;</button>
+      <div class="test-badge">TEST REJIMI · haqiqiy pul yechilmaydi</div>
+      <div class="steps" id="checkoutSteps"><span class="active">Tarif</span><span>To'lov</span><span>Tasdiqlash</span></div>
+
+      <!-- 1. Tarif -->
+      <div class="co-step active" data-step="1">
+        <h3>Tarifni tanlang</h3>
+        <p class="auth-reason" id="coReason" hidden></p>
+        <div class="co-plans" id="coPlans"></div>
+        <div class="co-total"><span>Jami:</span><b id="coTotal"></b></div>
+        <p class="co-saving" id="coSaving"></p>
+        <button class="btn-neon full" id="coNext1">Davom etish</button>
+      </div>
+
+      <!-- 2. Karta -->
+      <div class="co-step" data-step="2">
+        <div class="bank-card" id="bankCard">
+          <div class="bc-top"><span class="bc-chip"></span><b id="bcBrand">KARTA</b></div>
+          <div class="bc-number" id="bcNumber">•••• •••• •••• ••••</div>
+          <div class="bc-bottom"><span id="bcHolder">KARTA EGASI</span><span id="bcExp">MM/YY</span></div>
+        </div>
+        <form id="cardForm" novalidate>
+          <label class="field"><span>Karta raqami</span>
+            <input name="number" inputmode="numeric" autocomplete="cc-number" placeholder="8600 0000 0000 0000" maxlength="19" />
+          </label>
+          <div class="field-row">
+            <label class="field"><span>Amal qilish muddati</span>
+              <input name="exp" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/YY" maxlength="5" />
+            </label>
+            <label class="field" id="cvcField"><span>CVC</span>
+              <input name="cvc" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="3" />
+            </label>
+          </div>
+          <label class="field"><span>Karta egasi</span>
+            <input name="holder" autocomplete="cc-name" placeholder="ISM FAMILIYA" />
+          </label>
+          <p class="form-error" data-error></p>
+          <div class="co-actions">
+            <button type="button" class="btn-outline" data-back>Orqaga</button>
+            <button type="submit" class="btn-neon" id="payBtn">To'lash</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 3. SMS -->
+      <div class="co-step" data-step="3">
+        <h3>SMS kodni kiriting</h3>
+        <p class="muted" id="smsHint"></p>
+        <div class="otp" id="otp">
+          <input inputmode="numeric" maxlength="1" /><input inputmode="numeric" maxlength="1" /><input inputmode="numeric" maxlength="1" />
+          <input inputmode="numeric" maxlength="1" /><input inputmode="numeric" maxlength="1" /><input inputmode="numeric" maxlength="1" />
+        </div>
+        <p class="form-error" id="otpError"></p>
+        <div class="co-actions">
+          <button type="button" class="btn-outline" data-back>Orqaga</button>
+          <button type="button" class="btn-neon" id="otpBtn">Tasdiqlash</button>
+        </div>
+      </div>
+
+      <!-- 4. Muvaffaqiyat -->
+      <div class="co-step" data-step="4">
+        <div class="success-ring"><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"/><path d="m15 27 7 7 15-15"/></svg></div>
+        <h3 id="successTitle">To'lov muvaffaqiyatli!</h3>
+        <p class="muted" id="successText"></p>
+        <button class="btn-neon full" id="successBtn" data-close>Tomosha qilishni boshlash</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE DRAWER -->
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <aside class="drawer glass" id="profileDrawer" aria-label="Shaxsiy profil">
+    <button class="close-x" id="drawerClose">&times;</button>
+    <div class="pf-head">
+      <div class="avatar big" id="pfAvatar"></div>
+      <div>
+        <h3 id="pfName"></h3>
+        <small id="pfEmail"></small>
+      </div>
+    </div>
+    <div class="pf-plan" id="pfPlan"></div>
+    <div class="pf-stats">
+      <div><b id="pfWatched">0</b><span>Ko'rilgan</span></div>
+      <div><b id="pfFavs">0</b><span>Sevimlilar</span></div>
+      <div><b id="pfPays">0</b><span>To'lovlar</span></div>
+    </div>
+    <div class="pf-tabs">
+      <button class="active" data-pf="favs">Sevimlilar</button>
+      <button data-pf="history">Tarix</button>
+      <button data-pf="payments">To'lovlar</button>
+      <button data-pf="settings">Sozlamalar</button>
+    </div>
+    <div class="pf-body" id="pfBody"></div>
+    <button class="btn-outline full logout" id="logoutBtn">Chiqish</button>
+  </aside>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="music.js"></script>
+  <script src="account.js"></script>
+  <script src="films-info.js"></script>
+  <script src="telegram-films.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
